@@ -2,7 +2,6 @@ import React from "react";
 import PropTypes from "prop-types";
 
 const Result = ({ value }) => (
-	//  debugger
 	<div className="result">{value}</div>
 );
 

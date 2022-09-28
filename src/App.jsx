@@ -1,19 +1,35 @@
-import React from "react";
-import Functions from './components/Functions'
+import React, { useState } from "react";
+import words from "lodash.words";
+import Functions from "./components/Functions";
 import Numbers from "./components/Numbers";
-import MathOperations from "./components/MathOperations"
-import Result from "./components/Result"
-import "./App.css"
-
+import MathOperations from "./components/MathOperations";
+import Result from "./components/Result";
+import "./App.css";
 
 const App = () => {
-	console.log('Renderización de la App');
+	const [stack, setStack] = useState("");
+
+	const items = words(stack, /[^-^+^*^/]+/g)
+	const value = items.length > 0 ? items[items.length - 1] : "0"
+
 	return (
 		<main className="react-calculator">
-			<Result value={ undefined }/>
-			<Numbers onClickNumber={text => console.log(text)}/>
-			<Functions onDelete={erase => console.log(erase)} onContentClear={ clear => console.log(clear) }/>
-			<MathOperations onClickOperation={operation => console.log(operation) } onClickEqual={equal => console.log(equal)}/>
+			<Result value={value} />
+			<Numbers onClickNumber={number => setStack(`${stack}${number}`)}
+			/>
+			<Functions
+				onDelete={() => {
+					if (stack.length > 0) {
+						const newStack = stack.substring(0, stack.length - 1);
+						setStack(newStack);
+					}
+				}}
+				onContentClear={() => setStack("")}
+			/>
+			<MathOperations
+				onClickOperation={ operation => setStack(`${stack}${operation}`)}
+				onClickEqual={() => setStack(eval(stack).toString()) }
+			/>
 		</main>
 	);
 };
